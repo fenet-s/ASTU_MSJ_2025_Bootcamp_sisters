@@ -43,49 +43,46 @@ import { JWT_EXPIRES_IN } from '../config/env.js';
 // }
 
 export const signUp = async (req, res, next) => {
-  try {
-    const { username, email, password } = req.body;
+    try {
+        const { username, email, password } = req.body;
 
-    // check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({
-        success: false,
-        message: "User already exists with this email",
-      });
+        const existingUser = await User.findOne({ email });
+        if(existingUser){
+            const error = new Error ('User already exists with this email');
+            error.statusCode = 400;
+            throw error;
+        }
+
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create new user
+        const newUser = new User({
+            name: username,
+            email,
+            password: hashedPassword
+        });
+        await newUser.save();
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: newUser._id, email: newUser.email },
+            JWT_SECRET,
+            { expiresIn: JWT_EXPIRES_IN }
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "User created successfully",
+            token,
+            data: { user: newUser }
+        });
+
+    } catch (error) {
+        next(error);  // just pass error to middleware
     }
-
-    // hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // create user
-    const newUser = await User.create({
-      username,
-      email,
-      password: hashedPassword,
-    });
-
-    // create token
-    const token = jwt.sign(
-      { userId: newUser._id },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
-
-    return res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      data: {
-        token,
-        user: newUser,
-      },
-    });
-
-  } catch (error) {
-    next(error);
-  }
-};
+}
 
 export const signIn = async (req, res, next) => {   
     try {   
