@@ -6,6 +6,8 @@ import { registerUser, loginUser, logoutUser } from './controllers/authControlle
 import { protect } from './middleware/authMiddleware'; // Add this import
 import { Request, Response, NextFunction } from 'express';
 import productRoutes from './routes/productRoutes';
+import cors from 'cors';
+
 
 
 
@@ -16,6 +18,10 @@ const app = express();
 
 // Middleware to read JSON and Cookies
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:3000', // Frontend URL
+  credentials: true                // Allow cookies to be sent
+}));
 app.use(cookieParser());
 
 // Auth Routes
@@ -26,6 +32,7 @@ app.get('/api/auth/profile', protect, (req: any, res: Response) => {
   res.json(req.user);
 });
 app.use('/api/products', productRoutes);
+
 
 
 const PORT = process.env.PORT || 5000;
