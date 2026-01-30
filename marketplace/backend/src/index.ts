@@ -5,6 +5,8 @@ import connectDB from './config/db';
 import { registerUser, loginUser, logoutUser } from './controllers/authController';
 import { protect } from './middleware/authMiddleware'; // Add this import
 import { Request, Response, NextFunction } from 'express';
+import productRoutes from './routes/productRoutes';
+
 
 
 dotenv.config();
@@ -23,6 +25,8 @@ app.post('/api/auth/logout', logoutUser);
 app.get('/api/auth/profile', protect, (req: any, res: Response) => {
   res.json(req.user);
 });
+app.use('/api/products', productRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
