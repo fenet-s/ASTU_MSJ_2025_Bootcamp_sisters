@@ -7,7 +7,6 @@ import {
   ShoppingBag,
   Heart,
   Search,
-  Menu,
   Trash2,
   Package,
   Pencil,
@@ -48,13 +47,27 @@ export default function Dashboard() {
   }, [router]);
 
   const handleContactSeller = (product: any) => {
-    const email = product.owner?.email;
-    if (!email) return alert("Seller email not found.");
+    const sellerEmail = product.owner?.email;
+    const sellerName = product.owner?.username;
+
+    // This will pop up on your screen to tell us if the data is there
+    if (!sellerEmail) {
+      alert(
+        `Error: The seller "@${sellerName}" does not have an email address attached to this product in the database.`,
+      );
+      console.log("Product Data for debugging:", product);
+      return;
+    }
+
     const subject = encodeURIComponent(`Inquiry: ${product.title}`);
     const body = encodeURIComponent(
-      `Hi ${product.owner?.username}, I'm interested in your ${product.title}.`,
+      `Hi ${sellerName}, I'm interested in your ${product.title}.`,
     );
-    window.open(`mailto:${email}?subject=${subject}&body=${body}`, "_self");
+
+    window.open(
+      `mailto:${sellerEmail}?subject=${subject}&body=${body}`,
+      "_self",
+    );
   };
 
   const handleDelete = async (id: string) => {
