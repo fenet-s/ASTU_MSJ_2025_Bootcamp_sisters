@@ -15,6 +15,7 @@ import {
   Mail,
   Filter,
   X,
+  Send,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -366,12 +367,33 @@ export default function Dashboard() {
                     <span className="text-lg md:text-2xl font-light tracking-tighter">
                       ${product.price}.00
                     </span>
-                    <button
-                      onClick={() => handleContactSeller(product)}
-                      className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest border border-gray-200 px-4 py-2 rounded-full hover:bg-black hover:text-white transition-all"
-                    >
-                      <Mail size={10} /> Inquire
-                    </button>
+                    <div className="flex flex-col gap-2">
+                      {/* EMAIL BUTTON */}
+                      {user?._id !== product.owner?._id && (
+                        <button
+                          onClick={() => handleContactSeller(product)}
+                          className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest border border-gray-200 px-4 py-2 rounded-full hover:bg-black hover:text-white transition-all w-full"
+                        >
+                          <Mail size={12} /> Email
+                        </button>
+                      )}
+
+                      {/* TELEGRAM BUTTON (Conditional) */}
+                      {user?._id !== product.owner?._id &&
+                        product.owner?.telegramUsername && (
+                          <button
+                            onClick={() =>
+                              window.open(
+                                `https://t.me/${product.owner.telegramUsername}`,
+                                "_blank",
+                              )
+                            }
+                            className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest bg-[#229ED9] text-white px-4 py-2 rounded-full hover:bg-[#1c86b9] transition-all w-full"
+                          >
+                            <Send size={12} /> Telegram
+                          </button>
+                        )}
+                    </div>
                   </div>
                 </div>
               </div>

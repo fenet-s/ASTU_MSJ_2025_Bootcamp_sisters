@@ -10,6 +10,7 @@ export default function RegisterPage() {
     username: "",
     email: "",
     password: "",
+    telegramUsername: "",
   });
   const router = useRouter();
 
@@ -55,6 +56,7 @@ export default function RegisterPage() {
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
               Email
             </label>
+
             <input
               type="email"
               required
@@ -62,6 +64,22 @@ export default function RegisterPage() {
               placeholder="john@campus.com"
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
+              Telegram @Username
+            </label>
+            <input
+              type="text"
+              className="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+              placeholder="e.g. jdoe_astu"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  telegramUsername: e.target.value.replace("@", ""),
+                })
               }
             />
           </div>

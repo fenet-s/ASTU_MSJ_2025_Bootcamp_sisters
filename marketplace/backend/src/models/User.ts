@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'], 
       default: 'user' 
     },
+    telegramUsername: { type: String, default: "" }, 
   },
   { timestamps: true }
 );

@@ -28,7 +28,7 @@ export const createProduct = async (req: any, res: Response) => {
 export const getProducts = async (req: Request, res: Response) => {
   try {
     // This is correct: it sends both username and email to the frontend
-    const products = await Product.find({}).populate('owner', 'username email');
+    const products = await Product.find({}).populate('owner', 'username email telegramUsername');
     res.json(products);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
