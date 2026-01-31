@@ -60,6 +60,5 @@ npm run dev
 /README.md
 /subscription-tracker: (Legacy/Other project).
 🏆 Deployment
-Live Site: [Insert your Vercel Link Here]
-API Endpoint: [Insert your Render Link Here]
+Live Site: https://vercel.com/fenet-s-projects-a02552f3/astu-msj-2025-bootcamp-sisters/HVtogemeXz7p9a2J12vzJRQuioYC
 ```
