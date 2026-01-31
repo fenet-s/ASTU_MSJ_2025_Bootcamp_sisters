@@ -18,16 +18,24 @@ const app = express();
 
 // Middleware to read JSON and Cookies
 app.use(express.json());
-// Replace your current app.use(cors(...)) with this:
 const allowedOrigins = [
-  'http://localhost:3000', 
-  process.env.FRONTEND_URL as string 
+  'http://localhost:3000',
+  'https://astu-msj-2025-bootcamp-sisters.vercel.app', 
+  process.env.FRONTEND_URL as string
 ];
 
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(new Error('CORS blocked'), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
 }));
+
 app.use(cookieParser());
 
 // Auth Routes
