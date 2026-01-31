@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProduct, getProducts , updateProduct,deleteProduct, isOwnerOrAdmin} from '../controllers/productController';
+import { createProduct, getProducts , updateProduct,deleteProduct, isOwnerOrAdmin, getMyProducts} from '../controllers/productController';
 import { protect } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -10,5 +10,7 @@ router.route('/')
 router.route('/:id')
   .put(protect, isOwnerOrAdmin, updateProduct)   
   .delete(protect, isOwnerOrAdmin, deleteProduct); 
+router.get('/me', protect, getMyProducts);
+
 
 export default router;

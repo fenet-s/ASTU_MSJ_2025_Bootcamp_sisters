@@ -25,6 +25,16 @@ export const createProduct = async (req: any, res: Response) => {
 
 // @desc    Get all products
 // @route   GET /api/products
+// @desc    Get logged in user products
+// @route   GET /api/products/me
+export const getMyProducts = async (req: any, res: Response) => {
+  try {
+    const products = await Product.find({ owner: req.user._id }).populate('owner', 'username email telegramUsername');
+    res.json(products);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
 export const getProducts = async (req: Request, res: Response) => {
   try {
     // This is correct: it sends both username and email to the frontend

@@ -16,6 +16,7 @@ import {
   Filter,
   X,
   Send,
+  User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -153,6 +154,11 @@ export default function Dashboard() {
               }
               size={18}
               className="text-gray-300 hover:text-red-500 cursor-pointer"
+            />
+            <User
+              onClick={() => router.push("/dashboard/profile")}
+              size={22}
+              className="cursor-pointer text-gray-400 hover:text-black transition-colors"
             />
           </div>
         </div>
@@ -367,7 +373,7 @@ export default function Dashboard() {
                     <span className="text-lg md:text-2xl font-light tracking-tighter">
                       ${product.price}.00
                     </span>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1">
                       {/* EMAIL BUTTON */}
                       {user?._id !== product.owner?._id && (
                         <button
