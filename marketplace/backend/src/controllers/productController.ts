@@ -5,14 +5,16 @@ import { Product } from '../models/Product';
 // @route   POST /api/products
 export const createProduct = async (req: any, res: Response) => {
   try {
-    const { title, description, price, category } = req.body;
+    // ADDED: imageUrl here so it gets pulled from the frontend request
+    const { title, description, price, category, imageUrl } = req.body;
 
     const product = await Product.create({
       title,
       description,
       price,
       category,
-      owner: req.user._id, // Set by our 'protect' middleware
+      imageUrl, // SAVES THE IMAGE URL
+      owner: req.user._id,
     });
 
     res.status(201).json(product);
@@ -25,7 +27,7 @@ export const createProduct = async (req: any, res: Response) => {
 // @route   GET /api/products
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    // Optional: add .populate('owner', 'username email') to see who owns it
+    // This is correct: it sends both username and email to the frontend
     const products = await Product.find({}).populate('owner', 'username email');
     res.json(products);
   } catch (error: any) {
@@ -42,7 +44,6 @@ export const isOwnerOrAdmin = async (req: any, res: Response, next: any) => {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    // Check if user is owner OR admin
     const isOwner = product.owner.toString() === req.user._id.toString();
     const isAdmin = req.user.role === 'admin';
 
@@ -62,8 +63,8 @@ export const updateProduct = async (req: Request, res: Response) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true } // This returns the modified document rather than the original
+      req.body, // This automatically handles title, price, imageUrl, etc.
+      { new: true } 
     );
     res.json(updatedProduct);
   } catch (error: any) {
