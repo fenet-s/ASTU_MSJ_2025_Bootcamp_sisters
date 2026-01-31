@@ -15,6 +15,8 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.set('trust proxy', 1); 
+
 
 // Middleware to read JSON and Cookies
 app.use(express.json());
