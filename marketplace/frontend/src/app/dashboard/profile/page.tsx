@@ -74,7 +74,7 @@ export default function ProfilePage() {
         <section className="mb-12 md:mb-20 flex flex-col md:flex-row items-center gap-6 md:gap-12 border-b border-gray-50 pb-12 md:pb-16 text-center md:text-left">
           {/* Avatar */}
           <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-50 rounded-full flex items-center justify-center text-gray-200 border border-gray-100 flex-shrink-0">
-            <User size={40} md:size={60} strokeWidth={1} />
+            <User size={40} strokeWidth={1} className="md:w-16 md:h-16" />{" "}
           </div>
 
           {/* User Details */}
