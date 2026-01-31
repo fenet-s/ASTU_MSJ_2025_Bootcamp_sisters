@@ -61,4 +61,18 @@ npm run dev
 /subscription-tracker: (Legacy/Other project).
 🏆 Deployment
 Live Site: https://vercel.com/fenet-s-projects-a02552f3/astu-msj-2025-bootcamp-sisters/HVtogemeXz7p9a2J12vzJRQuioYC
+
+image
+
+Dashboard
+![alt text](image.png)
+
+Login page
+
+![alt text](image-1.png)
+
+Registration page
+
+![alt text](image-2.png)
+
 ```
