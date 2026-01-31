@@ -7,6 +7,7 @@ import {
   ShoppingBag,
   Heart,
   Search,
+  Menu,
   Trash2,
   Package,
   Pencil,
@@ -49,27 +50,13 @@ export default function Dashboard() {
   }, [router]);
 
   const handleContactSeller = (product: any) => {
-    const sellerEmail = product.owner?.email;
-    const sellerName = product.owner?.username;
-
-    // This will pop up on your screen to tell us if the data is there
-    if (!sellerEmail) {
-      alert(
-        `Error: The seller "@${sellerName}" does not have an email address attached to this product in the database.`,
-      );
-      console.log("Product Data for debugging:", product);
-      return;
-    }
-
+    const email = product.owner?.email;
+    if (!email) return alert("Seller email not found.");
     const subject = encodeURIComponent(`Inquiry: ${product.title}`);
     const body = encodeURIComponent(
-      `Hi ${sellerName}, I'm interested in your ${product.title}.`,
+      `Hi ${product.owner?.username}, I'm interested in your ${product.title}.`,
     );
-
-    window.open(
-      `mailto:${sellerEmail}?subject=${subject}&body=${body}`,
-      "_self",
-    );
+    window.open(`mailto:${email}?subject=${subject}&body=${body}`, "_self");
   };
 
   const handleDelete = async (id: string) => {
@@ -108,74 +95,89 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-white text-black font-sans">
-      {/* --- TOP NAVIGATION --- */}
+      {/* --- RE-ENGINEERED RESPONSIVE NAVBAR --- */}
       <nav className="border-b border-gray-100 bg-white/90 backdrop-blur-md sticky top-0 z-[100]">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8 h-16 md:h-24 flex justify-between items-center">
-          <div className="flex items-center gap-4 md:gap-10">
-            <div className="hidden lg:flex gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-              <span className="text-black border-b border-black pb-1">
-                Collections
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8 h-16 md:h-24 flex items-center">
+          {/* Left: Menu & Desktop Links (Width 33%) */}
+          <div className="flex-1 flex items-center gap-4">
+            <Menu size={20} className="cursor-pointer" />
+            <div className="hidden lg:flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+              <span className="text-black border-b border-black pb-1 cursor-pointer">
+                Collection
               </span>
-              <span className="hover:text-black">Blogs</span>
+              <span className="hover:text-black cursor-pointer">Journal</span>
             </div>
           </div>
 
-          <h1
-            onClick={() => router.push("/dashboard")}
-            className="text-xl md:text-3xl font-serif italic tracking-tighter cursor-pointer absolute left-1/2 -translate-x-1/2"
-          >
-            ASTU Marketplace
-          </h1>
+          {/* Center: Logo (Width 33%) */}
+          <div className="flex-none text-center">
+            <h1
+              onClick={() => router.push("/dashboard")}
+              className="text-lg md:text-3xl font-serif italic tracking-tighter cursor-pointer whitespace-nowrap"
+            >
+              ASTU Marketplace
+            </h1>
+          </div>
 
-          <div className="flex items-center gap-3 md:gap-6">
-            <div className="hidden md:flex items-center bg-gray-50 px-4 py-2 rounded-full border border-gray-100">
-              <Search size={14} className="text-gray-400" />
+          {/* Right: Icons (Width 33%) */}
+          <div className="flex-1 flex justify-end items-center gap-2 md:gap-5">
+            {/* Search - Icon only on mobile */}
+            <div className="flex items-center group">
+              <Search size={18} className="text-gray-400 md:text-black" />
               <input
                 type="text"
                 placeholder="Search..."
-                className="bg-transparent border-none text-xs ml-2 w-24 lg:w-40 focus:ring-0"
+                className="hidden md:block bg-transparent border-none text-xs ml-2 w-24 lg:w-40 focus:ring-0"
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+
+            {/* Sell Button */}
             <PlusCircle
               onClick={() => router.push("/dashboard/create")}
               size={20}
-              className="cursor-pointer hover:text-blue-600"
+              className="cursor-pointer hover:text-blue-600 transition-colors"
             />
+
+            {/* Profile Link */}
+            <User
+              onClick={() => router.push("/dashboard/profile")}
+              size={20}
+              className="cursor-pointer hover:text-black transition-colors"
+            />
+
+            {/* Shopping Bag Counter */}
             <div className="relative cursor-pointer">
               <ShoppingBag size={20} />
               <span className="absolute -top-1.5 -right-1.5 bg-black text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">
                 {filteredProducts.length}
               </span>
             </div>
+
+            {/* Logout - Hidden on tiny phones to save space */}
             <LogOut
               onClick={() =>
                 api.post("/auth/logout").then(() => router.push("/login"))
               }
               size={18}
-              className="text-gray-300 hover:text-red-500 cursor-pointer"
-            />
-            <User
-              onClick={() => router.push("/dashboard/profile")}
-              size={22}
-              className="cursor-pointer text-gray-400 hover:text-black transition-colors"
+              className="hidden sm:block text-gray-300 hover:text-red-500 cursor-pointer transition-colors"
             />
           </div>
         </div>
       </nav>
 
-      {/* --- MOBILE FILTER BUTTON (Only visible on Mobile) --- */}
+      {/* --- MOBILE FILTER BUTTON --- */}
       <div className="lg:hidden p-4 border-b border-gray-50 sticky top-16 bg-white z-[90]">
         <button
           onClick={() => setShowMobileFilters(true)}
-          className="w-full flex items-center justify-center gap-2 py-3 border border-black text-[10px] font-black uppercase tracking-widest"
+          className="w-full flex items-center justify-center gap-2 py-3 border border-black text-[10px] font-black uppercase tracking-widest shadow-sm active:bg-black active:text-white transition-all"
         >
           <Filter size={14} /> Filter Collection
         </button>
       </div>
 
       <main className="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 flex flex-col lg:flex-row gap-12">
-        {/* --- SIDEBAR (Overlay on Mobile, Sidebar on Desktop) --- */}
+        {/* --- SIDEBAR --- */}
         <aside
           className={`
           fixed inset-0 z-[200] bg-white p-8 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:w-72 lg:block
@@ -258,7 +260,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Apply Button for Mobile */}
           <button
             onClick={() => setShowMobileFilters(false)}
             className="lg:hidden w-full mt-10 bg-black text-white py-4 font-black uppercase tracking-widest text-[10px]"
@@ -268,7 +269,7 @@ export default function Dashboard() {
         </aside>
 
         <div className="flex-1">
-          {/* --- HERO BANNER (Responsive height/text) --- */}
+          {/* --- HERO BANNER --- */}
           <section className="relative w-full h-[240px] md:h-[380px] rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden mb-12 md:mb-20 bg-[#f3f3f3] flex flex-col md:flex-row items-center border border-gray-50">
             <div className="w-full md:w-3/5 h-1/2 md:h-full">
               <img
@@ -312,7 +313,7 @@ export default function Dashboard() {
             </div>
           </header>
 
-          {/* --- PRODUCT GRID (1 col mobile, 2 col tablet, 3 col desktop) --- */}
+          {/* --- PRODUCT GRID --- */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 md:gap-x-12 gap-y-12 md:gap-y-24">
             {filteredProducts.map((product) => (
               <div key={product._id} className="group relative">
@@ -374,29 +375,26 @@ export default function Dashboard() {
                       ${product.price}.00
                     </span>
                     <div className="flex flex-col gap-1">
-                      {/* EMAIL BUTTON */}
                       {user?._id !== product.owner?._id && (
                         <button
                           onClick={() => handleContactSeller(product)}
                           className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest border border-gray-200 px-4 py-2 rounded-full hover:bg-black hover:text-white transition-all w-full"
                         >
-                          <Mail size={12} /> Email
+                          <Mail size={10} /> Email
                         </button>
                       )}
-
-                      {/* TELEGRAM BUTTON (Conditional) */}
                       {user?._id !== product.owner?._id &&
                         product.owner?.telegramUsername && (
                           <button
                             onClick={() =>
                               window.open(
-                                `https://t.me/${product.owner.telegramUsername}`,
+                                `https://t.me/${product.owner.telegramUsername.replace("@", "")}`,
                                 "_blank",
                               )
                             }
                             className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest bg-[#229ED9] text-white px-4 py-2 rounded-full hover:bg-[#1c86b9] transition-all w-full"
                           >
-                            <Send size={12} /> Telegram
+                            <Send size={10} /> Telegram
                           </button>
                         )}
                     </div>
