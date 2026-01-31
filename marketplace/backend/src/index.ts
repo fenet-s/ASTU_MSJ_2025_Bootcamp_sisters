@@ -18,9 +18,15 @@ const app = express();
 
 // Middleware to read JSON and Cookies
 app.use(express.json());
+// Replace your current app.use(cors(...)) with this:
+const allowedOrigins = [
+  'http://localhost:3000', 
+  process.env.FRONTEND_URL as string 
+];
+
 app.use(cors({
-  origin: 'http://localhost:3000', // Frontend URL
-  credentials: true                // Allow cookies to be sent
+  origin: allowedOrigins,
+  credentials: true
 }));
 app.use(cookieParser());
 
