@@ -65,14 +65,15 @@ Live Site: https://vercel.com/fenet-s-projects-a02552f3/astu-msj-2025-bootcamp-s
 image
 
 Dashboard
-![alt text](image.png)
+
+marketplace\assets\image.png
 
 Login page
 
-![alt text](image-1.png)
+marketplace\assets\image-1.png
 
 Registration page
 
-![alt text](image-2.png)
+marketplace\assets\image-2.png
 
 ```
