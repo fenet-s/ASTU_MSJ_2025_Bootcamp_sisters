@@ -4,12 +4,24 @@ import { Event } from '../models/Event.js';
 export const createEvent = async (req: any, res: Response) => {
   try {
     const { title, description, location, date, imageUrl } = req.body;
+    
+    // If req.user is missing because 'protect' wasn't used, this line crashes the server
+    if (!req.user) {
+        return res.status(401).json({ message: "Not authorized" });
+    }
+
     const event = await Event.create({
-      title, description, location, date, imageUrl,
+      title, 
+      description, 
+      location, 
+      date, 
+      imageUrl,
       organizer: req.user._id
     });
+    
     res.status(201).json(event);
   } catch (error: any) {
+    console.error("Event Creation Error:", error.message);
     res.status(400).json({ message: error.message });
   }
 };
