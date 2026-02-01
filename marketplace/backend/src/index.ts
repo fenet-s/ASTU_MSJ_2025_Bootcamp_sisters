@@ -2,7 +2,7 @@ import express, { Response } from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import connectDB from './config/db.js';
+import connectDB from './config/db.js'; // ADDED .js
 
 // Controllers
 import { 
@@ -10,19 +10,17 @@ import {
   loginUser, 
   logoutUser, 
   toggleBookmark 
-} from './controllers/authController.js';
+} from './controllers/authController.js'; // ADDED .js
 
 // Routes & Middleware
-import productRoutes from './routes/productRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import { protect } from './middleware/authMiddleware.js';
+import productRoutes from './routes/productRoutes.js'; // ADDED .js
+import userRoutes from './routes/userRoutes.js';       // ADDED .js
+import { protect } from './middleware/authMiddleware.js'; // ADDED .js
 
 dotenv.config();
 connectDB();
 
 const app = express();
-
-// 1. SETTINGS & MIDDLEWARE (Must come first!)
 app.set('trust proxy', 1); 
 
 const allowedOrigins = [
@@ -32,36 +30,24 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      return callback(new Error('CORS blocked'), false);
-    }
-    return callback(null, true);
-  },
+  origin: allowedOrigins,
   credentials: true,
 }));
 
-app.use(express.json()); // Essential to read req.body
-app.use(cookieParser()); // Essential to read cookies
+app.use(express.json());
+app.use(cookieParser());
 
-// 2. AUTHENTICATION ROUTES
+// ROUTES
 app.post('/api/auth/register', registerUser);
 app.post('/api/auth/login', loginUser);
 app.post('/api/auth/logout', logoutUser);
-
-// Profile Route
 app.get('/api/auth/profile', protect, (req: any, res: Response) => {
   res.json(req.user);
 });
-
-// Bookmark Route
 app.post('/api/auth/bookmark', protect, toggleBookmark);
 
-// 3. ENTITY ROUTES
-app.use('/api/products', productRoutes); // Handles all /api/products...
-app.use('/api/users', userRoutes);       // Handles Admin User management
+app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
 
-// 4. SERVER START
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
