@@ -113,11 +113,20 @@ export default function Dashboard() {
           {/* Left: Menu & Desktop Links (Width 33%) */}
           <div className="flex-1 flex items-center gap-4">
             <Menu size={20} className="cursor-pointer" />
-            <div className="hidden lg:flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-              <span className="text-black border-b border-black pb-1 cursor-pointer">
-                Collection
+            <div className="hidden lg:flex gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">
+              <span className="text-black cursor-pointer border-b border-black pb-1">
+                Collections
               </span>
-              <span className="hover:text-black cursor-pointer">Journal</span>
+              {/* Add this link */}
+              <span
+                onClick={() => router.push("/dashboard/events")}
+                className="hover:text-black cursor-pointer transition-colors"
+              >
+                Bulletin
+              </span>
+              <span className="hover:text-black cursor-pointer transition-colors">
+                Blogs
+              </span>
             </div>
           </div>
 

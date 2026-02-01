@@ -4,6 +4,9 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import connectDB from './config/db.js'; 
 import { User } from './models/User.js';
+import eventRoutes from './routes/eventRoutes.js';
+
+
 
 // Controllers
 import { 
@@ -23,6 +26,8 @@ connectDB();
 
 const app = express();
 app.set('trust proxy', 1); 
+app.use('/api/events', eventRoutes);
+
 
 const allowedOrigins = [
   'http://localhost:3000',
