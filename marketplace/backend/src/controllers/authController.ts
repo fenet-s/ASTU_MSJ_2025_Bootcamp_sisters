@@ -72,3 +72,34 @@ export const logoutUser = (req: Request, res: Response) => {
   });
   res.status(200).json({ message: 'Logged out successfully' });
 };
+
+export const toggleBookmark = async (req: any, res: Response) => {
+  const user = await User.findById(req.user._id);
+  const productId = req.params.id;
+
+  if (user?.bookmarks.includes(productId)) {
+    user.bookmarks = user.bookmarks.filter(id => id.toString() !== productId);
+  } else {
+    user?.bookmarks.push(productId);
+  }
+  await user?.save();
+  res.json(user?.bookmarks);
+};
+
+// @desc    Get all users (Admin only)
+export const getUsers = async (req: Request, res: Response) => {
+  const users = await User.find({}).select('-password');
+  res.json(users);
+};
+
+// @desc    Delete a user (Admin only)
+export const deleteUser = async (req: Request, res: Response) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    if (user.role === 'admin') return res.status(400).json({ message: "Cannot delete an admin" });
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: 'User removed' });
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+};

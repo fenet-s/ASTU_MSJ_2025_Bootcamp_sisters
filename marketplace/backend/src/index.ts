@@ -2,13 +2,13 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db';
-import { registerUser, loginUser, logoutUser } from './controllers/authController';
+import { registerUser, loginUser, logoutUser, deleteUser, getUsers } from './controllers/authController';
 import { protect } from './middleware/authMiddleware'; // Add this import
 import { Request, Response, NextFunction } from 'express';
 import productRoutes from './routes/productRoutes';
 import cors from 'cors';
-
-
+import { admin} from './middleware/authMiddleware';
+// ...
 
 
 dotenv.config();
@@ -16,6 +16,9 @@ connectDB();
 
 const app = express();
 app.set('trust proxy', 1); 
+app.get('/api/auth/users', protect, admin, getUsers);
+app.delete('/api/auth/users/:id', protect, admin, deleteUser);
+
 
 
 // Middleware to read JSON and Cookies

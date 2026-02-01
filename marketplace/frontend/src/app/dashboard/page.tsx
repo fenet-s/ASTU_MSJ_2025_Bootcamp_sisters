@@ -70,6 +70,17 @@ export default function Dashboard() {
     }
   };
 
+  const [cart, setCart] = useState<any[]>([]);
+
+  const addToCart = (product: any) => {
+    const exists = cart.find((item) => item._id === product._id);
+    if (!exists) {
+      const newCart = [...cart, product];
+      setCart(newCart);
+      localStorage.setItem("wink_cart", JSON.stringify(newCart));
+    }
+  };
+
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title
       .toLowerCase()
@@ -363,8 +374,11 @@ export default function Dashboard() {
                       {product.title}
                     </h3>
                     <Heart
-                      size={16}
-                      className="text-gray-200 hover:text-red-500 hover:fill-red-500 cursor-pointer ml-2"
+                      size={18}
+                      onClick={() =>
+                        api.post("/auth/bookmark", { productId: product._id })
+                      }
+                      className={`cursor-pointer transition-all ${user?.bookmarks?.includes(product._id) ? "fill-red-500 text-red-500" : "text-gray-200"}`}
                     />
                   </div>
                   <p className="text-xs text-gray-400 italic line-clamp-1">
