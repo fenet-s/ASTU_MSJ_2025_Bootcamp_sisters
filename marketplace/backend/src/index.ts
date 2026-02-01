@@ -2,8 +2,8 @@ import express, { Response } from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import connectDB from './config/db.js'; // ADDED .js
-import { User } from './models/User.js'; // ADDED .js
+import connectDB from './config/db.js'; 
+import { User } from './models/User.js';
 
 // Controllers
 import { 
@@ -11,12 +11,12 @@ import {
   loginUser, 
   logoutUser, 
   toggleBookmark 
-} from './controllers/authController.js'; // ADDED .js
+} from './controllers/authController.js'; 
 
 // Routes & Middleware
-import productRoutes from './routes/productRoutes.js'; // ADDED .js
-import userRoutes from './routes/userRoutes.js';       // ADDED .js
-import { protect } from './middleware/authMiddleware.js'; // ADDED .js
+import productRoutes from './routes/productRoutes.js'; 
+import userRoutes from './routes/userRoutes.js';       
+import { protect } from './middleware/authMiddleware.js'; 
 
 dotenv.config();
 connectDB();
