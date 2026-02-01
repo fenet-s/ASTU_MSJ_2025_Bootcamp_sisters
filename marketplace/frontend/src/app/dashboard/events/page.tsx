@@ -31,7 +31,7 @@ export default function EventsPage() {
           <ArrowLeft size={16} className="inline mr-2" /> the collection
         </button>
         <h1 className="text-2xl font-serif italic absolute left-1/2 -translate-x-1/2">
-          wiñk bulletin
+          ASTU marketplace notices
         </h1>
         <button
           onClick={() => router.push("/dashboard/events/create")}
