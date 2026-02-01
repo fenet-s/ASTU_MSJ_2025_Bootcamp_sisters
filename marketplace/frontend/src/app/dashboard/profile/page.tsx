@@ -180,7 +180,7 @@ export default function ProfilePage() {
         </section>
         {/* --- ADD THIS BELOW YOUR LISTINGS SECTION --- */}
         <section className="mt-32">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-12 text-blue-600">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-12 text-black">
             Saved to Favorites
           </h3>
 

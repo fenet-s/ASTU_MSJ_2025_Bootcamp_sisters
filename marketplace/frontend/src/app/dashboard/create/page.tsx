@@ -56,7 +56,7 @@ export default function CreateProduct() {
         <form onSubmit={handleSubmit} className="space-y-10">
           {/* PRODUCT TITLE */}
           <div className="border-b border-gray-100 pb-2 transition-all focus-within:border-black">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1 block">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-700 mb-1 block">
               The Title
             </label>
             <input
@@ -73,7 +73,7 @@ export default function CreateProduct() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {/* PRICE */}
             <div className="border-b border-gray-100 pb-2 transition-all focus-within:border-black">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1 block">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-700 mb-1 block">
                 Price ($)
               </label>
               <input
@@ -89,7 +89,7 @@ export default function CreateProduct() {
 
             {/* CATEGORY */}
             <div className="border-b border-gray-100 pb-2 transition-all focus-within:border-black">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1 block">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-700 mb-1 block">
                 Category
               </label>
               <select
@@ -124,13 +124,13 @@ export default function CreateProduct() {
 
           {/* IMAGE URL */}
           <div className="border-b border-gray-100 pb-2 transition-all focus-within:border-black">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1 block">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-700 mb-1 block">
               Cover Image URL
             </label>
             <input
               type="text"
               placeholder="https://images.unsplash.com/..."
-              className="w-full py-2 text-sm font-mono text-blue-500 outline-none placeholder:text-gray-200"
+              className="w-full py-2 text-sm font-mono text-gray-900 outline-none placeholder:text-gray-200"
               onChange={(e) =>
                 setFormData({ ...formData, imageUrl: e.target.value })
               }
@@ -139,7 +139,7 @@ export default function CreateProduct() {
 
           {/* DESCRIPTION */}
           <div className="border-b border-gray-100 pb-2 transition-all focus-within:border-black">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1 block">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-700 mb-1 block">
               Condition & Details
             </label>
             <textarea
