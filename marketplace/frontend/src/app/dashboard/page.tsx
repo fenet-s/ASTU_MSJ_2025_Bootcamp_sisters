@@ -375,9 +375,18 @@ export default function Dashboard() {
                     </h3>
                     <Heart
                       size={18}
-                      onClick={() =>
-                        api.post("/auth/bookmark", { productId: product._id })
-                      }
+                      onClick={async (e) => {
+                        e.stopPropagation(); // Stop from clicking the product card
+                        try {
+                          const { data } = await api.post("/auth/bookmark", {
+                            productId: product._id,
+                          });
+                          // Update the user state locally so the heart turns red immediately
+                          setUser({ ...user, bookmarks: data.bookmarks });
+                        } catch (err) {
+                          console.error("Bookmark failed");
+                        }
+                      }}
                       className={`cursor-pointer transition-all ${user?.bookmarks?.includes(product._id) ? "fill-red-500 text-red-500" : "text-gray-200"}`}
                     />
                   </div>

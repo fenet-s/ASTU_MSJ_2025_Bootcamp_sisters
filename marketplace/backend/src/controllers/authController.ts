@@ -76,26 +76,39 @@ export const logoutUser = (req: Request, res: Response) => {
 // Add this at the bottom of your authController.ts
 export const toggleBookmark = async (req: any, res: Response) => {
   try {
-    const user = await User.findById(req.user._id);
     const { productId } = req.body;
+    
+    // Safety check: Is the product ID actually there?
+    if (!productId) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
 
+    const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Initialize bookmarks if they don't exist
-    if (!user.bookmarks) user.bookmarks = [];
+    // 1. Initialize the bookmarks array if it doesn't exist (Fixes the 500 error)
+    if (!user.bookmarks) {
+      user.bookmarks = [];
+    }
 
-    const isBookmarked = user.bookmarks.map(id => id.toString()).includes(productId);
+    // 2. Check if already bookmarked (converting IDs to strings for comparison)
+    const isBookmarked = user.bookmarks.some(id => id.toString() === productId);
 
     if (isBookmarked) {
+      // REMOVE: keep only IDs that DON'T match the clicked one
       user.bookmarks = user.bookmarks.filter(id => id.toString() !== productId);
     } else {
+      // ADD
       user.bookmarks.push(productId);
     }
 
     await user.save();
-    res.json(user.bookmarks);
+    
+    // Return the updated bookmarks so the frontend knows it worked
+    res.json({ bookmarks: user.bookmarks });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error("❌ Bookmark logic crashed:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
