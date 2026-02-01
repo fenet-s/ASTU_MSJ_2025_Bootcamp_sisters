@@ -73,17 +73,30 @@ export const logoutUser = (req: Request, res: Response) => {
   res.status(200).json({ message: 'Logged out successfully' });
 };
 
+// Add this at the bottom of your authController.ts
 export const toggleBookmark = async (req: any, res: Response) => {
-  const user = await User.findById(req.user._id);
-  const productId = req.params.id;
+  try {
+    const user = await User.findById(req.user._id);
+    const { productId } = req.body;
 
-  if (user?.bookmarks.includes(productId)) {
-    user.bookmarks = user.bookmarks.filter(id => id.toString() !== productId);
-  } else {
-    user?.bookmarks.push(productId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Initialize bookmarks if they don't exist
+    if (!user.bookmarks) user.bookmarks = [];
+
+    const isBookmarked = user.bookmarks.map(id => id.toString()).includes(productId);
+
+    if (isBookmarked) {
+      user.bookmarks = user.bookmarks.filter(id => id.toString() !== productId);
+    } else {
+      user.bookmarks.push(productId);
+    }
+
+    await user.save();
+    res.json(user.bookmarks);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-  await user?.save();
-  res.json(user?.bookmarks);
 };
 
 // @desc    Get all users (Admin only)
