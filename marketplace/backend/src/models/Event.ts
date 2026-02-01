@@ -6,7 +6,11 @@ const eventSchema = new mongoose.Schema({
   location: { type: String, required: true },
   date: { type: Date, required: true },
   imageUrl: { type: String },
-  organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  organizer: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  },
 }, { timestamps: true });
 
 export const Event = mongoose.model('Event', eventSchema);
