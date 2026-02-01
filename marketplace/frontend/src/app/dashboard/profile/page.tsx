@@ -178,6 +178,40 @@ export default function ProfilePage() {
             </div>
           )}
         </section>
+        {/* --- ADD THIS BELOW YOUR LISTINGS SECTION --- */}
+        <section className="mt-32">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-12 text-blue-600">
+            Saved to Favorites
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
+            {user?.bookmarks?.map((product: any) => (
+              <div
+                key={product._id}
+                className="group opacity-80 hover:opacity-100 transition-opacity"
+              >
+                <div className="relative aspect-[4/5] bg-[#f9f9f9] overflow-hidden mb-6">
+                  <img
+                    src={product.imageUrl}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                    alt=""
+                  />
+                  <div className="absolute bottom-3 left-3 bg-white/90 px-3 py-1 text-[8px] font-black uppercase">
+                    {product.category}
+                  </div>
+                </div>
+                <h4 className="text-sm font-medium">{product.title}</h4>
+                <p className="text-lg font-light">${product.price}.00</p>
+              </div>
+            ))}
+          </div>
+
+          {(!user?.bookmarks || user.bookmarks.length === 0) && (
+            <p className="text-gray-400 italic text-sm py-10 border-t border-gray-50">
+              No items saved yet.
+            </p>
+          )}
+        </section>
       </main>
 
       <footer className="py-12 md:py-20 border-t border-gray-50 text-center">

@@ -18,6 +18,7 @@ import {
   X,
   Send,
   User,
+  ShieldAlert,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -195,6 +196,14 @@ export default function Dashboard() {
           ${showMobileFilters ? "block" : "hidden"}
         `}
         >
+          {user?.role === "admin" && (
+            <button
+              onClick={() => router.push("/dashboard/admin")}
+              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-red-50 text-red-600 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-all"
+            >
+              <ShieldAlert size={14} /> Admin Mode
+            </button>
+          )}
           <div className="flex justify-between items-center mb-8 lg:hidden">
             <h3 className="font-black uppercase tracking-widest text-sm">
               Filters

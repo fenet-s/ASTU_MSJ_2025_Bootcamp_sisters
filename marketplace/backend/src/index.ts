@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import connectDB from './config/db.js'; // ADDED .js
+import { User } from './models/User.js'; // ADDED .js
 
 // Controllers
 import { 
@@ -41,8 +42,11 @@ app.use(cookieParser());
 app.post('/api/auth/register', registerUser);
 app.post('/api/auth/login', loginUser);
 app.post('/api/auth/logout', logoutUser);
-app.get('/api/auth/profile', protect, (req: any, res: Response) => {
-  res.json(req.user);
+// backend/src/index.ts
+app.get('/api/auth/profile', protect, async (req: any, res: Response) => {
+  // We find the user and "populate" the bookmarks so we see titles/prices
+  const user = await User.findById(req.user._id).populate('bookmarks');
+  res.json(user);
 });
 app.post('/api/auth/bookmark', protect, toggleBookmark);
 
