@@ -3,9 +3,10 @@ import { useState } from "react";
 import api from "../../lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -16,6 +17,7 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(false);
     try {
       await api.post("/auth/register", formData);
       router.push("/dashboard");
@@ -101,13 +103,20 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            className="group w-full bg-black text-white p-4 rounded-2xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-800 transition-all mt-4"
+            disabled={isSubmitting}
+            className="group w-full bg-black text-white p-4 rounded-2xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-800 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
           >
-            Create Account{" "}
-            <ArrowRight
-              size={16}
-              className="group-hover:translate-x-1 transition-transform"
-            />
+            {isSubmitting ? (
+              <Loader2 className="animate-spin" size={18} />
+            ) : (
+              <>
+                Create Account
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </>
+            )}
           </button>
         </form>
 

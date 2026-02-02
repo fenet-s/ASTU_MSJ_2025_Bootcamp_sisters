@@ -12,10 +12,12 @@ export default function CreateEvent() {
     date: "",
     imageUrl: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     await api.post("/events", formData);
     router.push("/dashboard/events");
   };
@@ -95,9 +97,10 @@ export default function CreateEvent() {
 
           <button
             type="submit"
-            className="w-full bg-black text-white py-5 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-gray-800 transition-all"
+            disabled={isSubmitting}
+            className="w-full bg-black text-white py-5 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
           >
-            Publish to Bulletin
+            {isSubmitting ? "Publishing..." : "Publish to Bulletin"}
           </button>
         </form>
       </div>
