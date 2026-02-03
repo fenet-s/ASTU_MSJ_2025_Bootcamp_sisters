@@ -101,7 +101,6 @@ export default function Dashboard() {
         <div className="max-w-[1440px] mx-auto w-full px-4 md:px-8 flex justify-between items-center relative">
           {/* Left: Nav Links */}
           <div className="flex-1 flex items-center gap-3 md:gap-8">
-            <Menu size={20} className="cursor-pointer shrink-0" />
             <div className="hidden lg:flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
               <span
                 onClick={() => router.push("/dashboard")}
