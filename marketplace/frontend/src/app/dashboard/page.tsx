@@ -89,47 +89,55 @@ export default function Dashboard() {
 
   if (loading)
     return (
-      <div className="h-screen flex items-center justify-center font-serif italic animate-pulse">
+      <div className="h-screen flex items-center justify-center font-serif italic animate-pulse text-black">
         ASTU Marketplace...
       </div>
     );
 
   return (
     <div className="min-h-screen bg-white text-black font-sans overflow-x-hidden">
-      {/* --- MOBILE-OPTIMIZED 3-COLUMN NAVBAR --- */}
+      {/* --- CORRECTED NAV BAR --- */}
       <nav className="border-b border-gray-100 bg-white/90 backdrop-blur-md sticky top-0 z-[100] h-16 md:h-24 flex items-center">
         <div className="max-w-[1440px] mx-auto w-full px-4 md:px-8 flex justify-between items-center relative">
-          {/* Left: Menu & Nav Links */}
-          <div className="flex-1 flex items-center gap-4">
+          {/* Left: Nav Links */}
+          <div className="flex-1 flex items-center gap-3 md:gap-8">
+            <Menu size={20} className="cursor-pointer shrink-0" />
             <div className="hidden lg:flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-              <span className="text-black border-b border-black pb-1 cursor-pointer">
+              <span
+                onClick={() => router.push("/dashboard")}
+                className="text-black border-b border-black pb-1 cursor-pointer"
+              >
                 Collection
               </span>
-              <span className="hover:text-black cursor-pointer transition-colors">
+              {/* FIXED BULLETIN LINK */}
+              <span
+                onClick={() => router.push("/dashboard/events")}
+                className="hover:text-black cursor-pointer transition-colors"
+              >
                 Bulletin
               </span>
             </div>
           </div>
 
-          {/* Center: Logo (Adaptive Size) */}
+          {/* Center: Logo */}
           <div className="flex-none flex justify-center">
             <h1
               onClick={() => router.push("/dashboard")}
-              className="text-base md:text-3xl font-serif italic tracking-tighter cursor-pointer whitespace-nowrap"
+              className="text-sm md:text-3xl font-serif italic tracking-tighter cursor-pointer whitespace-nowrap px-2"
             >
               ASTU Marketplace
             </h1>
           </div>
 
-          {/* Right: Actions (Icons always visible) */}
-          <div className="flex-1 flex justify-end items-center gap-2 md:gap-5">
-            {/* Admin Access Icon */}
+          {/* Right: Actions */}
+          <div className="flex-1 flex justify-end items-center gap-3 md:gap-5">
+            {/* Admin Toggle */}
             {user?.role === "admin" && (
               <button
                 onClick={() => router.push("/dashboard/admin")}
-                className="p-1.5 md:p-2 bg-red-50 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all"
+                className="p-1.5 md:p-2 bg-red-50 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all shadow-sm"
               >
-                Admin Dashboard
+                <ShieldAlert size={16} />
               </button>
             )}
 
@@ -152,34 +160,32 @@ export default function Dashboard() {
               </span>
             </div>
 
+            {/* FIXED LOGOUT BUTTON (Visible on all screens) */}
             <LogOut
               onClick={() =>
                 api.post("/auth/logout").then(() => router.push("/login"))
               }
               size={18}
-              className="text-gray-300 hover:text-red-500 cursor-pointer hidden xs:block"
+              className="text-gray-300 hover:text-red-500 cursor-pointer transition-colors"
             />
           </div>
         </div>
       </nav>
 
-      {/* --- MOBILE FILTER TOGGLE --- */}
+      {/* --- MOBILE FILTER --- */}
       <div className="lg:hidden p-4 border-b border-gray-50 sticky top-16 bg-white z-[90]">
         <button
           onClick={() => setShowMobileFilters(true)}
-          className="w-full flex items-center justify-center gap-2 py-3 border border-black text-[10px] font-black uppercase tracking-widest shadow-sm"
+          className="w-full flex items-center justify-center gap-2 py-3 border border-black text-[10px] font-black uppercase tracking-widest active:bg-black active:text-white transition-colors"
         >
-          <Filter size={14} /> Filter Collection
+          <Filter size={14} /> Filter Selection
         </button>
       </div>
 
       <main className="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 flex flex-col lg:flex-row gap-12">
-        {/* --- SIDEBAR FILTERS (Responsive Drawer) --- */}
+        {/* --- SIDEBAR --- */}
         <aside
-          className={`
-          fixed inset-0 z-[200] bg-white p-8 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:w-72 lg:block
-          ${showMobileFilters ? "block" : "hidden"}
-        `}
+          className={`fixed inset-0 z-[200] bg-white p-8 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:w-72 lg:block ${showMobileFilters ? "block" : "hidden"}`}
         >
           <div className="flex justify-between items-center mb-8 lg:hidden">
             <h3 className="font-black uppercase tracking-widest text-sm">
@@ -190,11 +196,9 @@ export default function Dashboard() {
               className="cursor-pointer"
             />
           </div>
-
           <h3 className="hidden lg:block text-[11px] font-black uppercase tracking-[0.3em] mb-8 border-b border-black pb-2">
             Category
           </h3>
-
           <div className="space-y-8 max-h-[70vh] lg:max-h-none overflow-y-auto pr-2">
             {[
               {
@@ -228,7 +232,7 @@ export default function Dashboard() {
                         onChange={() => toggleCategory(cat)}
                       />
                       <span
-                        className={`text-[13px] tracking-tight ${selectedCategories.includes(cat) ? "text-black font-bold" : "text-gray-500 group-hover:text-black"}`}
+                        className={`text-[13px] tracking-tight ${selectedCategories.includes(cat) ? "text-black font-bold" : "text-gray-500"}`}
                       >
                         {cat}
                       </span>
@@ -237,10 +241,9 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
-
             <div className="pt-8 border-t border-gray-100">
-              <h3 className="text-[11px] font-black uppercase tracking-widest mb-6">
-                Price Ceiling: ${maxPrice}
+              <h3 className="text-[11px] font-black uppercase tracking-widest mb-6 text-black">
+                Max Price: ${maxPrice}
               </h3>
               <input
                 type="range"
@@ -253,19 +256,17 @@ export default function Dashboard() {
               />
             </div>
           </div>
-
           <button
             onClick={() => setShowMobileFilters(false)}
             className="lg:hidden w-full mt-10 bg-black text-white py-4 font-black uppercase tracking-widest text-[10px]"
           >
-            Show {filteredProducts.length} Results
+            Show Results
           </button>
         </aside>
 
-        {/* --- MAIN PRODUCT GRID --- */}
+        {/* --- GRID --- */}
         <div className="flex-1">
-          {/* HERO BANNER */}
-          <section className="relative w-full h-[260px] md:h-[380px] rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden mb-12 md:mb-20 bg-[#f3f3f3] flex flex-col md:flex-row items-center border border-gray-50">
+          <section className="relative w-full h-[240px] md:h-[380px] rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden mb-12 md:mb-20 bg-[#f3f3f3] flex flex-col md:flex-row items-center border border-gray-50">
             <div className="w-full md:w-3/5 h-1/2 md:h-full">
               <img
                 src="https://cdn.prod.website-files.com/63d926b37ec0d886c2d5d538/66bb66990191f0f7cbd5b497_6696449889aff652530258af_online-marketplace-min--2---1-.jpeg"
@@ -277,8 +278,11 @@ export default function Dashboard() {
               <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-gray-400 mb-2 md:mb-4 block">
                 - 2026 Collection
               </span>
-              <h2 className="text-xl md:text-4xl lg:text-5xl font-light tracking-tighter mb-4 md:mb-8">
-                The Best of <span className="italic font-serif">ASTU</span>
+              <h2 className="text-xl md:text-4xl lg:text-5xl font-light tracking-tighter mb-4 md:mb-8 text-black">
+                The Best of{" "}
+                <span className="italic font-serif underline decoration-1 underline-offset-4">
+                  ASTU
+                </span>
               </h2>
               <button
                 onClick={() => router.push("/dashboard/create")}
@@ -292,9 +296,9 @@ export default function Dashboard() {
           <header className="mb-8 md:mb-16 border-b border-gray-50 pb-6 md:pb-8 flex justify-between items-end">
             <div>
               <p className="text-[9px] md:text-[11px] text-gray-400 font-black uppercase tracking-[0.3em] mb-2">
-                Home • Marketplace
+                Home • Boutique
               </p>
-              <h2 className="text-3xl md:text-6xl font-light tracking-tighter">
+              <h2 className="text-3xl md:text-6xl font-light tracking-tighter text-black">
                 Collection
               </h2>
             </div>
@@ -311,7 +315,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 md:gap-x-12 gap-y-12 md:gap-y-24">
             {filteredProducts.map((product) => (
               <div key={product._id} className="group relative">
-                <div className="relative aspect-[3/4] bg-[#fcfcfc] overflow-hidden mb-6 md:mb-8 shadow-sm group-hover:shadow-xl transition-all duration-500">
+                <div className="relative aspect-[3/4] bg-[#fcfcfc] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500">
                   {product.imageUrl ? (
                     <img
                       src={product.imageUrl}
@@ -327,7 +331,6 @@ export default function Dashboard() {
                     </div>
                   )}
 
-                  {/* Edit/Delete Overlay */}
                   {(user?.role === "admin" ||
                     user?._id === product.owner?._id) && (
                     <div className="absolute top-4 right-4 flex flex-col gap-2 md:translate-x-12 group-hover:translate-x-0 transition-transform duration-300">
@@ -365,14 +368,14 @@ export default function Dashboard() {
                         });
                         setUser({ ...user, bookmarks: data.bookmarks });
                       }}
-                      className={`cursor-pointer transition-all ${user?.bookmarks?.includes(product._id) ? "fill-red-500 text-red-500" : "text-gray-200"}`}
+                      className={`cursor-pointer transition-all ${user?.bookmarks?.map((b: any) => b._id || b).includes(product._id) ? "fill-red-500 text-red-500" : "text-gray-200"}`}
                     />
                   </div>
                   <p className="text-xs text-gray-400 italic line-clamp-1">
                     {product.description}
                   </p>
                   <div className="flex justify-between items-center pt-3 border-t border-gray-50">
-                    <span className="text-xl md:text-2xl font-light tracking-tighter">
+                    <span className="text-xl md:text-2xl font-light tracking-tighter text-black">
                       ${product.price}.00
                     </span>
                     <div className="flex flex-col items-end gap-1.5">
@@ -406,25 +409,15 @@ export default function Dashboard() {
             <div className="py-24 md:py-48 text-center border-2 border-dashed border-gray-50 rounded-[2rem] flex flex-col items-center">
               <Sparkles size={30} className="text-gray-100 mb-4" />
               <p className="text-gray-400 font-serif italic text-lg text-black">
-                The collection is quiet.
+                The collection is currently empty.
               </p>
-              <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategories([]);
-                  setMaxPrice(2000);
-                }}
-                className="mt-4 text-[10px] font-black uppercase tracking-widest border-b border-black pb-1"
-              >
-                Reset All
-              </button>
             </div>
           )}
         </div>
       </main>
 
-      <footer className="border-t border-gray-100 py-12 md:py-20 mt-12 text-center">
-        <h2 className="text-3xl md:text-6xl font-serif italic tracking-tighter text-gray-100 mb-4">
+      <footer className="border-t border-gray-100 py-12 md:py-20 mt-12 text-center bg-white">
+        <h2 className="text-3xl md:text-6xl font-serif italic tracking-tighter text-gray-100 mb-4 select-none">
           ASTU Marketplace
         </h2>
         <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.5em] text-gray-300">
