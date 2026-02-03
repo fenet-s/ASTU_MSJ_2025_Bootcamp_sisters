@@ -19,6 +19,7 @@ import {
   Send,
   User,
   ShieldAlert,
+  ChevronRight,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -27,6 +28,7 @@ export default function Dashboard() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Mobile Menu State
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -66,7 +68,7 @@ export default function Dashboard() {
         await api.delete(`/products/${id}`);
         setProducts(products.filter((p) => p._id !== id));
       } catch (err) {
-        alert("Action denied.");
+        alert("Denied.");
       }
     }
   };
@@ -96,11 +98,20 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-white text-black font-sans overflow-x-hidden">
-      {/* --- CORRECTED NAV BAR --- */}
-      <nav className="border-b border-gray-100 bg-white/90 backdrop-blur-md sticky top-0 z-[100] h-16 md:h-24 flex items-center">
+      {/* --- RESPONSIVE NAV BAR --- */}
+      <nav className="border-b border-gray-100 bg-white/90 backdrop-blur-md sticky top-0 z-[300] h-16 md:h-24 flex items-center">
         <div className="max-w-[1440px] mx-auto w-full px-4 md:px-8 flex justify-between items-center relative">
-          {/* Left: Nav Links */}
-          <div className="flex-1 flex items-center gap-3 md:gap-8">
+          {/* Left: Desktop Links / Mobile Hamburger */}
+          <div className="flex-1 flex items-center gap-4">
+            {/* Mobile Toggle Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+
+            {/* Desktop Only Links */}
             <div className="hidden lg:flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
               <span
                 onClick={() => router.push("/dashboard")}
@@ -108,7 +119,6 @@ export default function Dashboard() {
               >
                 Collection
               </span>
-              {/* FIXED BULLETIN LINK */}
               <span
                 onClick={() => router.push("/dashboard/events")}
                 className="hover:text-black cursor-pointer transition-colors"
@@ -122,69 +132,134 @@ export default function Dashboard() {
           <div className="flex-none flex justify-center">
             <h1
               onClick={() => router.push("/dashboard")}
-              className="text-sm md:text-3xl font-serif italic tracking-tighter cursor-pointer whitespace-nowrap px-2"
+              className="text-lg md:text-3xl font-serif italic tracking-tighter cursor-pointer whitespace-nowrap px-2"
             >
               ASTU Marketplace
             </h1>
           </div>
 
-          {/* Right: Actions */}
+          {/* Right: Desktop Actions / Mobile Shopping Bag Only */}
           <div className="flex-1 flex justify-end items-center gap-3 md:gap-5">
-            {/* Admin Toggle */}
-            {user?.role === "admin" && (
-              <button
-                onClick={() => router.push("/dashboard/admin")}
-                className="p-1.5 md:p-2 bg-red-50 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all shadow-sm"
-              >
-                Admin Dashboard
-              </button>
-            )}
+            {/* Desktop Only Actions */}
+            <div className="hidden lg:flex items-center gap-5">
+              {user?.role === "admin" && (
+                <button
+                  onClick={() => router.push("/dashboard/admin")}
+                  className="p-2 bg-red-50 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all"
+                >
+                  <ShieldAlert size={18} />
+                </button>
+              )}
+              <PlusCircle
+                onClick={() => router.push("/dashboard/create")}
+                size={22}
+                className="cursor-pointer hover:text-blue-600 transition-colors"
+              />
+              <User
+                onClick={() => router.push("/dashboard/profile")}
+                size={22}
+                className="cursor-pointer hover:text-black transition-colors"
+              />
+              <LogOut
+                onClick={() =>
+                  api.post("/auth/logout").then(() => router.push("/login"))
+                }
+                size={20}
+                className="text-gray-300 hover:text-red-500 cursor-pointer"
+              />
+            </div>
 
-            <PlusCircle
-              onClick={() => router.push("/dashboard/create")}
-              size={20}
-              className="cursor-pointer hover:text-blue-600 transition-colors shrink-0"
-            />
-
-            <User
-              onClick={() => router.push("/dashboard/profile")}
-              size={20}
-              className="cursor-pointer hover:text-black transition-colors shrink-0"
-            />
-
-            <div className="relative cursor-pointer shrink-0">
-              <ShoppingBag size={20} />
-              <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center">
+            {/* Always Visible Shopping Bag */}
+            <div className="relative cursor-pointer">
+              <ShoppingBag size={22} />
+              <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                 {filteredProducts.length}
               </span>
             </div>
+          </div>
+        </div>
 
-            {/* FIXED LOGOUT BUTTON (Visible on all screens) */}
-            <LogOut
+        {/* --- MOBILE DROPDOWN MENU --- */}
+        <div
+          className={`absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-2xl transition-all duration-300 transform lg:hidden ${isMenuOpen ? "translate-y-0 opacity-100 visible" : "-translate-y-4 opacity-0 invisible"}`}
+        >
+          <div className="p-6 space-y-4 flex flex-col">
+            <button
+              onClick={() => {
+                router.push("/dashboard/profile");
+                setIsMenuOpen(false);
+              }}
+              className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl font-bold text-sm"
+            >
+              <div className="flex items-center gap-3">
+                <User size={18} /> My Profile
+              </div>
+              <ChevronRight size={16} />
+            </button>
+            <button
+              onClick={() => {
+                router.push("/dashboard/events");
+                setIsMenuOpen(false);
+              }}
+              className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl font-bold text-sm"
+            >
+              <div className="flex items-center gap-3">
+                <Sparkles size={18} /> Announcements
+              </div>
+              <ChevronRight size={16} />
+            </button>
+            <button
+              onClick={() => {
+                router.push("/dashboard/create");
+                setIsMenuOpen(false);
+              }}
+              className="flex items-center justify-between p-4 bg-blue-50 text-blue-600 rounded-2xl font-bold text-sm"
+            >
+              <div className="flex items-center gap-3">
+                <PlusCircle size={18} /> Sell an Item
+              </div>
+              <ArrowRight size={16} />
+            </button>
+            {user?.role === "admin" && (
+              <button
+                onClick={() => {
+                  router.push("/dashboard/admin");
+                  setIsMenuOpen(false);
+                }}
+                className="flex items-center justify-between p-4 bg-red-50 text-red-600 rounded-2xl font-bold text-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <ShieldAlert size={18} /> Admin Dashboard
+                </div>
+                <ChevronRight size={16} />
+              </button>
+            )}
+            <button
               onClick={() =>
                 api.post("/auth/logout").then(() => router.push("/login"))
               }
-              size={18}
-              className="text-gray-300 hover:text-red-500 cursor-pointer transition-colors"
-            />
+              className="flex items-center gap-3 p-4 text-gray-400 font-bold text-sm"
+            >
+              <LogOut size={18} /> Logout
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* --- MOBILE FILTER --- */}
+      {/* --- MOBILE FILTER TOGGLE --- */}
       <div className="lg:hidden p-4 border-b border-gray-50 sticky top-16 bg-white z-[90]">
         <button
           onClick={() => setShowMobileFilters(true)}
-          className="w-full flex items-center justify-center gap-2 py-3 border border-black text-[10px] font-black uppercase tracking-widest active:bg-black active:text-white transition-colors"
+          className="w-full flex items-center justify-center gap-2 py-3 border border-black text-[10px] font-black uppercase tracking-widest active:bg-black active:text-white transition-colors shadow-sm"
         >
           <Filter size={14} /> Filter Selection
         </button>
       </div>
 
       <main className="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 flex flex-col lg:flex-row gap-12">
-        {/* --- SIDEBAR --- */}
+        {/* SIDEBAR */}
         <aside
-          className={`fixed inset-0 z-[200] bg-white p-8 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:w-72 lg:block ${showMobileFilters ? "block" : "hidden"}`}
+          className={`fixed inset-0 z-[400] bg-white p-8 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:w-72 lg:block ${showMobileFilters ? "block" : "hidden"}`}
         >
           <div className="flex justify-between items-center mb-8 lg:hidden">
             <h3 className="font-black uppercase tracking-widest text-sm">
@@ -231,7 +306,7 @@ export default function Dashboard() {
                         onChange={() => toggleCategory(cat)}
                       />
                       <span
-                        className={`text-[13px] tracking-tight ${selectedCategories.includes(cat) ? "text-black font-bold" : "text-gray-500"}`}
+                        className={`text-sm tracking-tight ${selectedCategories.includes(cat) ? "text-black font-bold" : "text-gray-500"}`}
                       >
                         {cat}
                       </span>
@@ -240,9 +315,9 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
-            <div className="pt-8 border-t border-gray-100">
-              <h3 className="text-[11px] font-black uppercase tracking-widest mb-6 text-black">
-                Max Price: ${maxPrice}
+            <div className="pt-8 border-t border-gray-100 text-black">
+              <h3 className="text-[11px] font-black uppercase tracking-widest mb-6">
+                Price Ceiling: ${maxPrice}
               </h3>
               <input
                 type="range"
@@ -263,8 +338,9 @@ export default function Dashboard() {
           </button>
         </aside>
 
-        {/* --- GRID --- */}
+        {/* GRID */}
         <div className="flex-1">
+          {/* HERO BANNER */}
           <section className="relative w-full h-[240px] md:h-[380px] rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden mb-12 md:mb-20 bg-[#f3f3f3] flex flex-col md:flex-row items-center border border-gray-50">
             <div className="w-full md:w-3/5 h-1/2 md:h-full">
               <img
@@ -311,10 +387,11 @@ export default function Dashboard() {
             </div>
           </header>
 
+          {/* PRODUCT LIST */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 md:gap-x-12 gap-y-12 md:gap-y-24">
             {filteredProducts.map((product) => (
               <div key={product._id} className="group relative">
-                <div className="relative aspect-[3/4] bg-[#fcfcfc] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-500">
+                <div className="relative aspect-[3/4] bg-[#fcfcfc] overflow-hidden mb-6 md:mb-8 shadow-sm group-hover:shadow-xl transition-all duration-500">
                   {product.imageUrl ? (
                     <img
                       src={product.imageUrl}
@@ -403,20 +480,11 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="py-24 md:py-48 text-center border-2 border-dashed border-gray-50 rounded-[2rem] flex flex-col items-center">
-              <Sparkles size={30} className="text-gray-100 mb-4" />
-              <p className="text-gray-400 font-serif italic text-lg text-black">
-                The collection is currently empty.
-              </p>
-            </div>
-          )}
         </div>
       </main>
 
       <footer className="border-t border-gray-100 py-12 md:py-20 mt-12 text-center bg-white">
-        <h2 className="text-3xl md:text-6xl font-serif italic tracking-tighter text-gray-100 mb-4 select-none">
+        <h2 className="text-3xl md:text-6xl font-serif italic tracking-tighter text-gray-100 mb-4">
           ASTU Marketplace
         </h2>
         <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.5em] text-gray-300">
