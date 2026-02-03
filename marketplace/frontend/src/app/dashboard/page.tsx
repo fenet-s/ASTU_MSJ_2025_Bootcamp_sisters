@@ -136,7 +136,7 @@ export default function Dashboard() {
                 onClick={() => router.push("/dashboard/admin")}
                 className="p-1.5 md:p-2 bg-red-50 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all shadow-sm"
               >
-                Dashboard
+                Admin Dashboard
               </button>
             )}
 
