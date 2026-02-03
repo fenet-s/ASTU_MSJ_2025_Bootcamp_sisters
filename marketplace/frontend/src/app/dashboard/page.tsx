@@ -114,7 +114,7 @@ export default function Dashboard() {
                 onClick={() => router.push("/dashboard/events")}
                 className="hover:text-black cursor-pointer transition-colors"
               >
-                Bulletin
+                Announcements
               </span>
             </div>
           </div>
