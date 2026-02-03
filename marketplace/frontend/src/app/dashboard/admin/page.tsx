@@ -79,7 +79,7 @@ export default function AdminPage() {
               color: "text-blue-600",
             },
             {
-              label: "Active Listings",
+              label: "Total Products",
               value: stats.products,
               icon: Package,
               color: "text-green-600",
