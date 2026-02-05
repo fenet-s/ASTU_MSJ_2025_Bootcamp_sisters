@@ -43,7 +43,7 @@ export default function EventsPage() {
   if (loading)
     return (
       <div className="h-screen flex items-center justify-center font-serif italic animate-pulse">
-        wiñk bulletin...
+        Loading events...
       </div>
     );
 
@@ -172,7 +172,7 @@ export default function EventsPage() {
 
       <footer className="py-20 border-t border-gray-50 text-center">
         <p className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-200">
-          wiñk bulletin studio © 2026
+          ASTU marketplace studio © 2026
         </p>
       </footer>
     </div>

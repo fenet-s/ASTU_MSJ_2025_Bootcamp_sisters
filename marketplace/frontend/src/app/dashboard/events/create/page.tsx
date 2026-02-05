@@ -40,7 +40,7 @@ export default function CreateEvent() {
           <span className="sm:hidden">discard</span>
         </button>
         <h1 className="text-xl md:text-2xl font-serif italic tracking-tighter absolute left-1/2 -translate-x-1/2">
-          wiñk bulletin
+          ASTU Marketplace
         </h1>
       </nav>
 
