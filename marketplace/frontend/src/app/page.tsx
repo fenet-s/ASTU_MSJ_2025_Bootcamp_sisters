@@ -9,9 +9,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
       {/* --- HERO SECTION --- */}
       <nav className="h-24 px-8 md:px-16 flex items-center justify-between">
-        <h1 className="text-3xl font-serif italic tracking-tighter">
-          ASTU Marketplace
-        </h1>
+        <h1 className="text-3xl font-serif italic tracking-tighter">wiñk</h1>
         <button
           onClick={() => router.push("/login")}
           className="text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-1 hover:text-blue-600 hover:border-blue-600 transition-all"
@@ -88,7 +86,7 @@ export default function LandingPage() {
 
       <footer className="py-20 text-center border-t border-gray-50">
         <h2 className="text-8xl font-serif italic text-slate-50 mb-8 select-none tracking-tighter">
-          ASTU marketplace
+          wiñk
         </h2>
         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">
           © 2026 ASTU marketplace studio
