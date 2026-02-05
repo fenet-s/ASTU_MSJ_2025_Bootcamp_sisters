@@ -99,152 +99,150 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-white text-black font-sans overflow-x-hidden">
       {/* --- RESPONSIVE NAV BAR --- */}
-      <nav className="border-b border-gray-100 bg-white/90 backdrop-blur-md sticky top-0 z-[300] h-16 md:h-24 flex items-center">
-        <div className="max-w-[1440px] mx-auto w-full px-4 md:px-8 flex justify-between items-center relative">
-          {/* Left: Desktop Links / Mobile Hamburger */}
-          <div className="flex-1 flex items-center gap-4">
-            {/* Mobile Toggle Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+      <div className="max-w-[1440px] mx-auto w-full px-4 md:px-8 flex justify-between items-center relative">
+        {/* Left: Desktop Links / Mobile Hamburger */}
+        <div className="flex-1 flex items-center gap-4">
+          {/* Mobile Toggle Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
 
-            {/* Desktop Only Links */}
-            <div className="hidden lg:flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-              <span
-                onClick={() => router.push("/dashboard")}
-                className="text-black border-b border-black pb-1 cursor-pointer"
-              >
-                Collection
-              </span>
-              <span
-                onClick={() => router.push("/dashboard/events")}
-                className="hover:text-black cursor-pointer transition-colors"
-              >
-                Announcements
-              </span>
-            </div>
-          </div>
-
-          {/* Center: Logo */}
-          <div className="flex-none flex justify-center">
-            <h1
+          {/* Desktop Only Links */}
+          <div className="hidden lg:flex gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+            <span
               onClick={() => router.push("/dashboard")}
-              className="text-lg md:text-3xl font-serif italic tracking-tighter cursor-pointer whitespace-nowrap px-2"
+              className="text-black border-b border-black pb-1 cursor-pointer"
             >
-              ASTU Marketplace
-            </h1>
-          </div>
-
-          {/* Right: Desktop Actions / Mobile Shopping Bag Only */}
-          <div className="flex-1 flex justify-end items-center gap-3 md:gap-5">
-            {/* Desktop Only Actions */}
-            <div className="hidden lg:flex items-center gap-5">
-              {user?.role === "admin" && (
-                <button
-                  onClick={() => router.push("/dashboard/admin")}
-                  className="p-2 bg-red-50 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all"
-                >
-                  <ShieldAlert size={18} />
-                </button>
-              )}
-              <PlusCircle
-                onClick={() => router.push("/dashboard/create")}
-                size={22}
-                className="cursor-pointer hover:text-blue-600 transition-colors"
-              />
-              <User
-                onClick={() => router.push("/dashboard/profile")}
-                size={22}
-                className="cursor-pointer hover:text-black transition-colors"
-              />
-              <LogOut
-                onClick={() =>
-                  api.post("/auth/logout").then(() => router.push("/login"))
-                }
-                size={20}
-                className="text-gray-300 hover:text-red-500 cursor-pointer"
-              />
-            </div>
-
-            {/* Always Visible Shopping Bag */}
-            <div className="relative cursor-pointer">
-              <ShoppingBag size={22} />
-              <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                {filteredProducts.length}
-              </span>
-            </div>
+              Collection
+            </span>
+            <span
+              onClick={() => router.push("/dashboard/events")}
+              className="hover:text-black cursor-pointer transition-colors"
+            >
+              Announcements
+            </span>
           </div>
         </div>
 
-        {/* --- MOBILE DROPDOWN MENU --- */}
-        <div
-          className={`absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-2xl transition-all duration-300 transform lg:hidden ${isMenuOpen ? "translate-y-0 opacity-100 visible" : "-translate-y-4 opacity-0 invisible"}`}
-        >
-          <div className="p-6 space-y-4 flex flex-col">
-            <button
-              onClick={() => {
-                router.push("/dashboard/profile");
-                setIsMenuOpen(false);
-              }}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl font-bold text-sm"
-            >
-              <div className="flex items-center gap-3">
-                <User size={18} /> My Profile
-              </div>
-              <ChevronRight size={16} />
-            </button>
-            <button
-              onClick={() => {
-                router.push("/dashboard/events");
-                setIsMenuOpen(false);
-              }}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl font-bold text-sm"
-            >
-              <div className="flex items-center gap-3">
-                <Sparkles size={18} /> Announcements
-              </div>
-              <ChevronRight size={16} />
-            </button>
-            <button
-              onClick={() => {
-                router.push("/dashboard/create");
-                setIsMenuOpen(false);
-              }}
-              className="flex items-center justify-between p-4 bg-blue-50 text-blue-600 rounded-2xl font-bold text-sm"
-            >
-              <div className="flex items-center gap-3">
-                <PlusCircle size={18} /> Sell an Item
-              </div>
-              <ArrowRight size={16} />
-            </button>
+        {/* Center: Logo */}
+        <div className="flex-none flex justify-center">
+          <h1
+            onClick={() => router.push("/dashboard")}
+            className="text-lg md:text-3xl font-serif italic tracking-tighter cursor-pointer whitespace-nowrap px-2"
+          >
+            ASTU Marketplace
+          </h1>
+        </div>
+
+        {/* Right: Desktop Actions / Mobile Shopping Bag Only */}
+        <div className="flex-1 flex justify-end items-center gap-3 md:gap-5">
+          {/* Desktop Only Actions */}
+          <div className="hidden lg:flex items-center gap-5">
             {user?.role === "admin" && (
               <button
-                onClick={() => {
-                  router.push("/dashboard/admin");
-                  setIsMenuOpen(false);
-                }}
-                className="flex items-center justify-between p-4 bg-red-50 text-red-600 rounded-2xl font-bold text-sm"
+                onClick={() => router.push("/dashboard/admin")}
+                className="p-2 bg-red-50 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all"
               >
-                <div className="flex items-center gap-3">
-                  <ShieldAlert size={18} /> Admin Dashboard
-                </div>
-                <ChevronRight size={16} />
+                <ShieldAlert size={18} />
               </button>
             )}
-            <button
+            <PlusCircle
+              onClick={() => router.push("/dashboard/create")}
+              size={22}
+              className="cursor-pointer hover:text-blue-600 transition-colors"
+            />
+            <User
+              onClick={() => router.push("/dashboard/profile")}
+              size={22}
+              className="cursor-pointer hover:text-black transition-colors"
+            />
+            <LogOut
               onClick={() =>
                 api.post("/auth/logout").then(() => router.push("/login"))
               }
-              className="flex items-center gap-3 p-4 text-gray-400 font-bold text-sm"
-            >
-              <LogOut size={18} /> Logout
-            </button>
+              size={20}
+              className="text-gray-300 hover:text-red-500 cursor-pointer"
+            />
+          </div>
+
+          {/* Always Visible Shopping Bag */}
+          <div className="relative cursor-pointer">
+            <ShoppingBag size={22} />
+            <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+              {filteredProducts.length}
+            </span>
           </div>
         </div>
-      </nav>
+      </div>
+
+      {/* --- MOBILE DROPDOWN MENU --- */}
+      <div
+        className={`absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-2xl transition-all duration-300 transform lg:hidden ${isMenuOpen ? "translate-y-0 opacity-100 visible" : "-translate-y-4 opacity-0 invisible"}`}
+      >
+        <div className="p-6 space-y-4 flex flex-col">
+          <button
+            onClick={() => {
+              router.push("/dashboard/profile");
+              setIsMenuOpen(false);
+            }}
+            className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl font-bold text-sm"
+          >
+            <div className="flex items-center gap-3">
+              <User size={18} /> My Profile
+            </div>
+            <ChevronRight size={16} />
+          </button>
+          <button
+            onClick={() => {
+              router.push("/dashboard/events");
+              setIsMenuOpen(false);
+            }}
+            className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl font-bold text-sm"
+          >
+            <div className="flex items-center gap-3">
+              <Sparkles size={18} /> Announcements
+            </div>
+            <ChevronRight size={16} />
+          </button>
+          <button
+            onClick={() => {
+              router.push("/dashboard/create");
+              setIsMenuOpen(false);
+            }}
+            className="flex items-center justify-between p-4 bg-blue-50 text-blue-600 rounded-2xl font-bold text-sm"
+          >
+            <div className="flex items-center gap-3">
+              <PlusCircle size={18} /> Sell an Item
+            </div>
+            <ArrowRight size={16} />
+          </button>
+          {user?.role === "admin" && (
+            <button
+              onClick={() => {
+                router.push("/dashboard/admin");
+                setIsMenuOpen(false);
+              }}
+              className="flex items-center justify-between p-4 bg-red-50 text-red-600 rounded-2xl font-bold text-sm"
+            >
+              <div className="flex items-center gap-3">
+                <ShieldAlert size={18} /> Admin Dashboard
+              </div>
+              <ChevronRight size={16} />
+            </button>
+          )}
+          <button
+            onClick={() =>
+              api.post("/auth/logout").then(() => router.push("/login"))
+            }
+            className="flex items-center gap-3 p-4 text-gray-400 font-bold text-sm"
+          >
+            <LogOut size={18} /> Logout
+          </button>
+        </div>
+      </div>
 
       {/* --- MOBILE FILTER TOGGLE --- */}
       <div className="lg:hidden p-4 border-b border-gray-50 sticky top-16 bg-white z-[90]">
@@ -258,85 +256,82 @@ export default function Dashboard() {
 
       <main className="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 flex flex-col lg:flex-row gap-12">
         {/* SIDEBAR */}
-        <aside
-          className={`fixed inset-0 z-[400] bg-white p-8 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:w-72 lg:block ${showMobileFilters ? "block" : "hidden"}`}
-        >
-          <div className="flex justify-between items-center mb-8 lg:hidden">
-            <h3 className="font-black uppercase tracking-widest text-sm">
-              Filters
+
+        <div className="flex justify-between items-center mb-8 lg:hidden">
+          <h3 className="font-black uppercase tracking-widest text-sm">
+            Filters
+          </h3>
+          <X
+            onClick={() => setShowMobileFilters(false)}
+            className="cursor-pointer"
+          />
+        </div>
+        <h3 className="hidden lg:block text-[11px] font-black uppercase tracking-[0.3em] mb-8 border-b border-black pb-2">
+          Category
+        </h3>
+        <div className="space-y-8 max-h-[70vh] lg:max-h-none overflow-y-auto pr-2">
+          {[
+            {
+              label: "Academic",
+              items: ["Books & Stationery", "Lab Gear", "Tech Accessories"],
+            },
+            {
+              label: "Fashion",
+              items: ["Clothing", "Footwear", "Bags & Accessories"],
+            },
+            { label: "Living", items: ["Furniture & Dorm", "Home Decor"] },
+            {
+              label: "Lifestyle",
+              items: ["Sports & Outdoors", "Beauty & Care"],
+            },
+          ].map((group) => (
+            <div key={group.label}>
+              <h4 className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-3">
+                {group.label}
+              </h4>
+              <div className="space-y-3">
+                {group.items.map((cat) => (
+                  <label
+                    key={cat}
+                    className="flex items-center gap-3 cursor-pointer group"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(cat)}
+                      className="appearance-none w-4 h-4 border border-gray-200 checked:bg-black checked:border-black transition-all cursor-pointer"
+                      onChange={() => toggleCategory(cat)}
+                    />
+                    <span
+                      className={`text-sm tracking-tight ${selectedCategories.includes(cat) ? "text-black font-bold" : "text-gray-500"}`}
+                    >
+                      {cat}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+          <div className="pt-8 border-t border-gray-100 text-black">
+            <h3 className="text-[11px] font-black uppercase tracking-widest mb-6">
+              Price Ceiling: ${maxPrice}
             </h3>
-            <X
-              onClick={() => setShowMobileFilters(false)}
-              className="cursor-pointer"
+            <input
+              type="range"
+              min="0"
+              max="2000"
+              step="50"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+              className="w-full accent-black h-[1px] bg-gray-200 appearance-none cursor-pointer"
             />
           </div>
-          <h3 className="hidden lg:block text-[11px] font-black uppercase tracking-[0.3em] mb-8 border-b border-black pb-2">
-            Category
-          </h3>
-          <div className="space-y-8 max-h-[70vh] lg:max-h-none overflow-y-auto pr-2">
-            {[
-              {
-                label: "Academic",
-                items: ["Books & Stationery", "Lab Gear", "Tech Accessories"],
-              },
-              {
-                label: "Fashion",
-                items: ["Clothing", "Footwear", "Bags & Accessories"],
-              },
-              { label: "Living", items: ["Furniture & Dorm", "Home Decor"] },
-              {
-                label: "Lifestyle",
-                items: ["Sports & Outdoors", "Beauty & Care"],
-              },
-            ].map((group) => (
-              <div key={group.label}>
-                <h4 className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-3">
-                  {group.label}
-                </h4>
-                <div className="space-y-3">
-                  {group.items.map((cat) => (
-                    <label
-                      key={cat}
-                      className="flex items-center gap-3 cursor-pointer group"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(cat)}
-                        className="appearance-none w-4 h-4 border border-gray-200 checked:bg-black checked:border-black transition-all cursor-pointer"
-                        onChange={() => toggleCategory(cat)}
-                      />
-                      <span
-                        className={`text-sm tracking-tight ${selectedCategories.includes(cat) ? "text-black font-bold" : "text-gray-500"}`}
-                      >
-                        {cat}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            ))}
-            <div className="pt-8 border-t border-gray-100 text-black">
-              <h3 className="text-[11px] font-black uppercase tracking-widest mb-6">
-                Price Ceiling: ${maxPrice}
-              </h3>
-              <input
-                type="range"
-                min="0"
-                max="2000"
-                step="50"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-full accent-black h-[1px] bg-gray-200 appearance-none cursor-pointer"
-              />
-            </div>
-          </div>
-          <button
-            onClick={() => setShowMobileFilters(false)}
-            className="lg:hidden w-full mt-10 bg-black text-white py-4 font-black uppercase tracking-widest text-[10px]"
-          >
-            Show Results
-          </button>
-        </aside>
+        </div>
+        <button
+          onClick={() => setShowMobileFilters(false)}
+          className="lg:hidden w-full mt-10 bg-black text-white py-4 font-black uppercase tracking-widest text-[10px]"
+        >
+          Show Results
+        </button>
 
         {/* GRID */}
         <div className="flex-1">
