@@ -11,7 +11,7 @@ const generateToken = (res: Response, userId: string) => {
   res.cookie('jwt', token, {
     httpOnly: true, // Prevents hackers from reading the cookie via JavaScript
     secure: process.env.NODE_ENV !== 'development', // Uses HTTPS in production
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    sameSite:  'none',
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
 };
