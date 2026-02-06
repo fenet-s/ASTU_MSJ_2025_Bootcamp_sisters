@@ -23,12 +23,6 @@ export default function LandingPage() {
         </h1>
         <div className="flex items-center gap-8">
           <button
-            onClick={() => router.push("/login")}
-            className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors"
-          >
-            Sign In
-          </button>
-          <button
             onClick={() => router.push("/register")}
             className="hidden sm:block bg-black text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:bg-gray-800 transition-all active:scale-95"
           >
