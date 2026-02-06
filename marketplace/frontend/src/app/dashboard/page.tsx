@@ -43,7 +43,8 @@ export default function Dashboard() {
         setUser(userRes.data);
         const productRes = await api.get("/products");
         setProducts(productRes.data);
-      } catch (err) {
+      } catch (err: any) {
+        // If the profile check fails (401), send user to login immediately
         router.push("/login");
       } finally {
         setLoading(false);
@@ -55,13 +56,17 @@ export default function Dashboard() {
   // --- NEW ROBUST LOGOUT FUNCTION ---
   const handleLogout = async () => {
     try {
+      // 1. Call the backend to clear the cookie
       await api.post("/auth/logout");
     } catch (err) {
-      console.error("Logout failed on server, clearing locally anyway");
+      console.error("Logout failed on server, clearing locally");
     } finally {
-      setUser(null); // Clear local state
+      // 2. Clear local state
+      setUser(null);
       setIsMenuOpen(false);
-      router.push("/login"); // Redirect
+
+      // 3. HARD REFRESH: This is the secret to stopping the auto-login loop
+      window.location.href = "/login";
     }
   };
 
