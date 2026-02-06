@@ -65,11 +65,17 @@ export const loginUser = async (req: Request, res: Response) => {
 
 // @desc    Logout user / Clear Cookie
 // @route   POST /api/auth/logout
+// backend/src/controllers/authController.ts
+
 export const logoutUser = (req: Request, res: Response) => {
   res.cookie('jwt', '', {
     httpOnly: true,
-    expires: new Date(0),
+    expires: new Date(0), // Expiries in the past deletes the cookie
+    secure: true,         // Required for Vercel/Render
+    sameSite: 'none',     // Required for Vercel/Render
+    path: '/',            // Must match the path used when created
   });
+  
   res.status(200).json({ message: 'Logged out successfully' });
 };
 
