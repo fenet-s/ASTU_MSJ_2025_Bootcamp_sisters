@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import api from "../../lib/api";
+import api from "../lib/api";
 import {
   LogOut,
   PlusCircle,
@@ -21,6 +21,7 @@ import {
   ShieldAlert,
   ChevronRight,
 } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
