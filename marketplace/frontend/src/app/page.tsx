@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import api from "../lib/api";
 import {
   LogOut,
-  PlusCircle,
   ShoppingBag,
   Heart,
   Search,
